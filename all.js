@@ -77,20 +77,30 @@ const app = Vue.createApp({
     },
     addCart(item, qty = 1) {
       this.loadingStatus.isLoading = item.id;
-      const cart = { product_id: item.id, qty };
-      axios
-        .post(`${url}/api/${path}/cart`, { data: cart })
-        .then((res) => {
-          if (res.data.success) {
-            this.getCart();
-            this.loadingStatus.isLoading = '';
-          } else {
-            alert(res.data.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.cart.carts.forEach((cart, i) => {
+        if (cart.product.id === item.id) {
+          console.log('執行重複');
+          console.log('repeat', i, this.cart.carts[i].qty);
+          qty = this.cart.carts[i].qty += 1;
+          this.updateCart(cart.id, qty);
+        } else {
+          const cart = { product_id: item.id, qty };
+          console.log('執行新增');
+          axios
+            .post(`${url}/api/${path}/cart`, { data: cart })
+            .then((res) => {
+              if (res.data.success) {
+                this.getCart();
+                this.loadingStatus.isLoading = '';
+              } else {
+                alert(res.data.message);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
     },
     updateCart(id, qty) {
       console.log(id, qty);
