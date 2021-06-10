@@ -75,9 +75,10 @@ const app = Vue.createApp({
           console.log(err);
         });
     },
-    addCart(item, qty = 1) {
-      this.loadingStatus.isLoading = item.id;
-      const cart = { product_id: item.id, qty };
+    addCart(id, qty = 1) {
+      console.log(id, '-MaX4KUjsRFFg4CVqxGn' === '-MaX4KUjsRFFg4CVqxGn');
+      this.loadingStatus.isLoading = id;
+      const cart = { product_id: id, qty };
       axios
         .post(`${url}/api/${path}/cart`, { data: cart })
         .then((res) => {
@@ -92,12 +93,11 @@ const app = Vue.createApp({
           console.log(err);
         });
     },
-    updateCart(id, qty) {
-      console.log(id, qty);
-      this.loadingStatus.isLoading = id;
-      const cart = { product_id: id, qty: qty };
+    updateCart(item, qty) {
+      this.loadingStatus.isLoading = item.id;
+      const cart = { product_id: item.product_id, qty: qty };
       axios
-        .put(`${url}/api/${path}/cart/${id}`, { data: cart })
+        .put(`${url}/api/${path}/cart/${item.id}`, { data: cart })
         .then((res) => {
           if (res.data.success) {
             alert(res.data.message);
@@ -191,9 +191,9 @@ app
             <td><img :src="item.product.imageUrl" alt="product" width="120" height="100"></td>
             <td>NT$ {{ item.product.price }}</td>
             <td>
-              <a href="#" class="btn btn-danger btn-sm" :class="{'disabled':item.qty===1 ||icon.isLoading===item.id}" @click.prevent="editCart(item.id,item.qty-1)">-</a> 
+              <a href="#" class="btn btn-danger btn-sm" :class="{'disabled':item.qty===1 ||icon.isLoading===item.id}" @click.prevent="editCart(item,item.qty-1)">-</a> 
               {{item.qty}} 
-              <a href="#" class="btn btn-danger btn-sm" :class="{'disabled' : icon.isLoading === item.id}" @click.prevent="editCart(item.id,item.qty+1)">+</a> 
+              <a href="#" class="btn btn-danger btn-sm" :class="{'disabled' : icon.isLoading === item.id}" @click.prevent="editCart(item,item.qty+1)">+</a> 
             </td>
             <td>NT$ {{ item.total }}</td>
             <td class="discardBtn">
@@ -228,6 +228,7 @@ app
         this.$emit('remove-cart', id);
       },
       editCart(id, qty) {
+        console.log(id, qty);
         this.$emit('edit-cart', id, qty);
       },
     },

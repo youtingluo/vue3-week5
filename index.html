@@ -55,7 +55,7 @@
                       href="#"
                       class="btn btn-danger"
                       :class="{'disabled' : loadingStatus.isLoading === item.id}"
-                      @click.prevent="addCart(item)"
+                      @click.prevent="addCart(item.id)"
                       ><div
                         class="spinner-border spinner-border-sm"
                         role="status"
@@ -96,7 +96,7 @@
               href="#"
               class="btn btn-danger"
               :class="{'disabled' : loadingStatus.isLoading === product.id }"
-              @click.prevent="addCart(product)"
+              @click.prevent="addCart(product.id)"
               v-if="JSON.stringify(product) !== '{}'"
               ><div
                 class="spinner-border spinner-border-sm"
